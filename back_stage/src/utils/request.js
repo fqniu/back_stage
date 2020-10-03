@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const request = axios.create({
-  baseURL: 'http://112.74.111.183:20020/api',
+  baseURL: 'http://112.74.111.183:2008/api',
   withCredentials: true,
   // headers: { // 所有请求都需要token值！
   //   Authorization
@@ -11,8 +11,12 @@ const request = axios.create({
 //请求拦截 
 request.interceptors.request.use(function (config) {
   //在这块处理一些 请求拦截时的公共 部分  比如 一个发起请求的时候 需要携带token
-  const userInfo = localStorage.getItem('userInfo')
-  config.headers.authorization = userInfo.Authorization
+
+  if (config.url !== "/login") {
+    const userInfo = localStorage.getItem('userInfo')
+    config.headers.authorization = userInfo.authorization
+  }
+
   return config;
 }, function (error) {
   return Promise.reject(error);
